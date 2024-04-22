@@ -2,17 +2,17 @@ extends CharacterBody2D
 
 signal hit
 
-@export var speed = 300
-@export var max_speed = 500
+@export var speed = 1000
+@export var max_speed = 1500
 
 var input_vector : Vector2
 
 var rotation_direction : int
-@export var rotation_speed := 3.5
+@export var rotation_speed := 5
 
 @export var friction_weight := 0.05
 
-const BULLET_SCENE = preload("res://entities/bullet/bullet.tscn")
+const BULLET_SCENE = preload("res://scenes/bullet.tscn")
 
 var screen_size
 
@@ -36,7 +36,7 @@ func _physics_process(delta):
 	velocity.x = clamp(velocity.x, -max_speed, max_speed)
 	velocity.y = clamp(velocity.y, -max_speed, max_speed)
 	
-	if input_vector.x == 0 && velocity != Vector2.ZERO:
+	if (input_vector.x == 0 || input_vector.y == 0) && velocity != Vector2.ZERO:
 		velocity = lerp(velocity, Vector2.ZERO, friction_weight)
 	
 		if abs(velocity.x) <= 0.1:
@@ -53,7 +53,7 @@ func _physics_process(delta):
 	
 
 
-func _on_body_entered(body):
+func _on_body_entered():
 	hide()
 	hit.emit()
 	$CollisionShape2D.set_deferred("disabled", true)

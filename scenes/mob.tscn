@@ -1,7 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://clj13ndbgieuo"]
+[gd_scene load_steps=4 format=3 uid="uid://mdmksqijg4gp"]
 
-[ext_resource type="Script" path="res://entities/mob/mob.gd" id="1_y757o"]
-[ext_resource type="Script" path="res://entities/mob/Sprite2D.gd" id="2_sib47"]
+[ext_resource type="Script" path="res://scripts/mob.gd" id="2_sib47"]
 [ext_resource type="Texture2D" uid="uid://b4e07ep3fvb6a" path="res://art/mob/1.svg" id="2_t4hyk"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_aa10i"]
@@ -12,7 +11,7 @@ height = 102.0
 collision_layer = 4
 collision_mask = 0
 gravity_scale = 1.66533e-16
-script = ExtResource("1_y757o")
+script = ExtResource("2_sib47")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1, 0)
@@ -25,4 +24,3 @@ shape = SubResource("CapsuleShape2D_aa10i")
 position = Vector2(6, -6)
 scale = Vector2(0.107656, 0.108281)
 texture = ExtResource("2_t4hyk")
-script = ExtResource("2_sib47")
