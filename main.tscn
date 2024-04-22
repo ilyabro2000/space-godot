@@ -1,0 +1,109 @@
+[gd_scene load_steps=11 format=3 uid="uid://b2aro2hpwpwji"]
+
+[ext_resource type="PackedScene" uid="uid://clj13ndbgieuo" path="res://entities/mob/mob.tscn" id="1_0dx14"]
+[ext_resource type="Script" path="res://main.gd" id="1_ojkgb"]
+[ext_resource type="PackedScene" uid="uid://c7vtn2igvmehb" path="res://entities/player/player.tscn" id="2_fg6dk"]
+[ext_resource type="Script" path="res://HUD.gd" id="4_3tisa"]
+[ext_resource type="PackedScene" uid="uid://m1wqpcnkqkja" path="res://entities/bullet/bullet.tscn" id="4_l5gjf"]
+[ext_resource type="FontFile" uid="uid://brj8jv20y77un" path="res://fonts/Xolonium-Regular.ttf" id="5_na6ts"]
+[ext_resource type="Texture2D" uid="uid://cf7vi8c7go6l3" path="res://art/background/main.png" id="6_d7amy"]
+
+[sub_resource type="Curve2D" id="Curve2D_4n7bg"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1280, 0, 0, 0, 0, 0, 1280, 720, 0, 0, 0, 0, 0, 712, 0, 0, 0, 0, 0, 0)
+}
+point_count = 5
+
+[sub_resource type="InputEventAction" id="InputEventAction_76wu8"]
+action = &"start_game"
+
+[sub_resource type="Shortcut" id="Shortcut_m48x5"]
+events = [SubResource("InputEventAction_76wu8")]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_ojkgb")
+mob_scene = ExtResource("1_0dx14")
+
+[node name="PLayer" parent="." instance=ExtResource("2_fg6dk")]
+visibility_layer = 3
+position = Vector2(648, 376)
+collision_layer = 2
+collision_mask = 4
+metadata/_edit_group_ = true
+
+[node name="bullet" parent="PLayer" instance=ExtResource("4_l5gjf")]
+position = Vector2(240, -5)
+
+[node name="MobTimer" type="Timer" parent="."]
+wait_time = 0.5
+
+[node name="StartTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="StartPosition" type="Marker2D" parent="."]
+position = Vector2(638, 369)
+
+[node name="MobPath" type="Path2D" parent="."]
+curve = SubResource("Curve2D_4n7bg")
+
+[node name="MobSpawnLocation" type="PathFollow2D" parent="MobPath"]
+
+[node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource("4_3tisa")
+
+[node name="Message" type="Label" parent="HUD"]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -128.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("5_na6ts")
+theme_override_font_sizes/font_size = 64
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="StartButton" type="Button" parent="HUD"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -128.0
+offset_top = -144.0
+offset_right = 128.0
+offset_bottom = -44.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("5_na6ts")
+theme_override_font_sizes/font_size = 64
+shortcut = SubResource("Shortcut_m48x5")
+text = "Start"
+
+[node name="MessageTimer" type="Timer" parent="HUD"]
+wait_time = 2.0
+one_shot = true
+
+[node name="Background" type="Sprite2D" parent="."]
+texture_filter = 4
+texture_repeat = 2
+position = Vector2(640, 360)
+texture = ExtResource("6_d7amy")
+region_enabled = true
+region_rect = Rect2(2.08165e-12, 2.08165e-12, 1280, 720)
+metadata/_edit_group_ = true
+
+[node name="Mob" parent="." instance=ExtResource("1_0dx14")]
+position = Vector2(200, -40)
+
+[connection signal="hit" from="PLayer" to="." method="game_over"]
+[connection signal="timeout" from="MobTimer" to="." method="_on_mob_timer_timeout"]
+[connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]
+[connection signal="start_game" from="HUD" to="." method="new_game"]
+[connection signal="pressed" from="HUD/StartButton" to="HUD" method="_on_start_button_pressed"]
+[connection signal="timeout" from="HUD/MessageTimer" to="HUD" method="_on_message_timer_timeout"]
+[connection signal="mob_destroyed" from="Mob" to="." method="_on_mob_mob_destroyed"]

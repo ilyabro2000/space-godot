@@ -1,0 +1,50 @@
+[gd_scene load_steps=8 format=3 uid="uid://c7vtn2igvmehb"]
+
+[ext_resource type="Script" path="res://entities/player/player.gd" id="1_xoufs"]
+[ext_resource type="Texture2D" uid="uid://dgs02hne33xgj" path="res://art/player/1.png" id="2_3xa58"]
+[ext_resource type="Texture2D" uid="uid://duvwh2u0pgt7u" path="res://art/player/3.png" id="3_d3m2u"]
+[ext_resource type="Texture2D" uid="uid://djia421o1khs5" path="res://art/player/4.png" id="4_clrfv"]
+[ext_resource type="Texture2D" uid="uid://b5822mt6ejip1" path="res://art/player/2.png" id="5_mtng1"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tnwpn"]
+radius = 17.0
+height = 80.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hv0to"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_clrfv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_3xa58")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_d3m2u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_mtng1")
+}],
+"loop": true,
+"name": &"main",
+"speed": 7.0
+}]
+
+[node name="PLayer" type="CharacterBody2D"]
+z_index = 10
+position = Vector2(244, 349)
+script = ExtResource("1_xoufs")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -5)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_tnwpn")
+debug_color = Color(0, 0.6, 0.701961, 0.419608)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(-5.00001, -5)
+rotation = 1.5708
+scale = Vector2(0.0539273, 0.049795)
+sprite_frames = SubResource("SpriteFrames_hv0to")
+animation = &"main"
+frame_progress = 0.0475439
