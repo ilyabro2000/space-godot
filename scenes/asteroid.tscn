@@ -1,0 +1,44 @@
+[gd_scene load_steps=4 format=3 uid="uid://bqyvx4x4o5sdh"]
+
+[sub_resource type="GDScript" id="GDScript_ebpbb"]
+script/source = "extends RigidBody2D
+
+const textures = []
+
+func _ready():
+	$Sprite2D.texture = (textures[randi() % textures.size()])
+
+signal mob_destroyed
+
+func _on_visible_on_screen_notifier_2d_screen_exited():
+	queue_free()
+
+func destroy():
+	mob_destroyed.emit()
+	queue_free()
+"
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_aa10i"]
+radius = 36.0
+height = 102.0
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_fg5ul"]
+load_path = "res://.godot/imported/1.svg-87e2e40fe6abc98778c441eea1a6291b.ctex"
+
+[node name="Mob" type="RigidBody2D" groups=["mobs"]]
+collision_layer = 4
+collision_mask = 0
+gravity_scale = 1.66533e-16
+script = SubResource("GDScript_ebpbb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, 0)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_aa10i")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(6, -6)
+scale = Vector2(0.107656, 0.108281)
+texture = SubResource("CompressedTexture2D_fg5ul")

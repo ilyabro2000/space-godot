@@ -3,12 +3,14 @@ extends Node
 @export var mob_scene: PackedScene
 var score
 
+@onready var player := $Player
+@onready var lasers := $Lasers
+
 func _ready():
-	pass
+	player.laser_shot.connect(_on_player_laser_shot)
 
-func _process(delta):
-	pass
-
+func _on_player_laser_shot(laser):
+	lasers.add_child(laser)
 
 func game_over():
 	$MobTimer.stop()
@@ -17,27 +19,9 @@ func game_over():
 
 func new_game():
 	score = 0
-	$PLayer.start($StartPosition.position)
-	$StartTimer.start()
-	
-	$HUD.show_message("Get Ready")
+	player.start($StartPosition.position)
 	
 	get_tree().call_group("mobs", "queue_free")
 
 func _on_start_timer_timeout():
 	$MobTimer.start()
-
-
-func _on_mob_timer_timeout():
-	var mob = mob_scene.instantiate()
-	var mob_spawn_location = $MobPath/MobSpawnLocation
-	mob_spawn_location.progress_ratio = randf()
-	
-	var direction = 1.2
-	
-	mob.position = mob_spawn_location.position
-
-	var velocity = Vector2(randf_range(300.0, 400.0), 0.0)
-	mob.linear_velocity = velocity.rotated(direction)
-	
-	add_child(mob)
